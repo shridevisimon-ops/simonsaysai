@@ -7,6 +7,7 @@ import "../lib/auth";
 export default function Home() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [currentSection, setCurrentSection] = useState("home");
 
   const API_URL = "https://yabu4fz7mg.execute-api.ap-southeast-1.amazonaws.com/chat";
 
@@ -34,72 +35,197 @@ export default function Home() {
     setInput("");
   };
 
+  const navigate = (section) => {
+    setCurrentSection(section);
+  };
+
   return (
     <Authenticator>
       {({ signOut }) => (
-        <div className="chat-app min-h-screen bg-[#f8fafc] text-[#121212]">
-          <div className="relative mx-auto flex min-h-screen max-w-6xl flex-col bg-white shadow-[0_20px_80px_rgba(15,23,42,0.08)]">
-            <header className="flex items-center justify-between bg-[#121212] px-6 py-5">
-              <div className="flex items-center gap-4">
-                <img src="/logo.svg" alt="simonsays logo" className="h-12 w-12 rounded-full object-cover" />
-                <span className="text-2xl font-bold tracking-[0.15em] uppercase text-white">simonsays</span>
-              </div>
+        <div className="min-h-screen bg-gradient-to-br from-white to-slate-50 text-slate-900">
+          <nav className="flex justify-between items-center px-20 py-6">
+            <h2 className="text-xl font-medium tracking-wide text-slate-900">simonsays</h2>
+            <div className="flex gap-6">
+              <button
+                onClick={() => navigate('home')}
+                className={`text-sm font-medium transition-colors ${
+                  currentSection === 'home' ? 'text-blue-600' : 'text-slate-500 hover:text-slate-700'
+                }`}
+              >
+                Home
+              </button>
+              <button
+                onClick={() => navigate('chat')}
+                className={`text-sm font-medium transition-colors ${
+                  currentSection === 'chat' ? 'text-blue-600' : 'text-slate-500 hover:text-slate-700'
+                }`}
+              >
+                Chat
+              </button>
+              <button
+                onClick={() => navigate('insights')}
+                className={`text-sm font-medium transition-colors ${
+                  currentSection === 'insights' ? 'text-blue-600' : 'text-slate-500 hover:text-slate-700'
+                }`}
+              >
+                Insights
+              </button>
+              <button
+                onClick={() => navigate('pricing')}
+                className={`text-sm font-medium transition-colors ${
+                  currentSection === 'pricing' ? 'text-blue-600' : 'text-slate-500 hover:text-slate-700'
+                }`}
+              >
+                Pricing
+              </button>
+              <button
+                onClick={() => navigate('about')}
+                className={`text-sm font-medium transition-colors ${
+                  currentSection === 'about' ? 'text-blue-600' : 'text-slate-500 hover:text-slate-700'
+                }`}
+              >
+                About
+              </button>
               <button
                 onClick={signOut}
-                className="rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-white/15"
+                className="text-sm font-medium text-slate-500 hover:text-slate-700 transition-colors"
               >
                 Sign Out
               </button>
-            </header>
+            </div>
+          </nav>
 
-            <main className="main-area relative flex-1 overflow-hidden px-6 pb-[calc(88px+env(safe-area-inset-bottom))] pt-8 sm:px-8">
-              <div className="chat-messages-wrapper flex-1 overflow-hidden">
-                {messages.length === 0 ? (
-                  <div className="empty-center flex h-full min-h-[calc(100vh_-_188px)] items-center justify-center text-center">
-                    <div className="empty-state max-w-3xl rounded-[32px] border border-slate-200 bg-white/90 p-10 shadow-[0_20px_50px_rgba(15,23,42,0.08)] backdrop-blur-md">
-                      <h2 className="text-5xl font-semibold tracking-tight text-[#121212] sm:text-6xl">
-                        What’s on <span className="text-[#121212]">Your</span> Mind?
-                      </h2>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="chat-messages mx-auto flex max-w-3xl flex-col gap-4 overflow-y-auto pb-4">
+          {currentSection === 'home' && (
+            <section className="px-20 py-24">
+              <div className="max-w-2xl mx-auto text-center">
+                <h1 className="text-5xl font-medium text-slate-900 mb-4">
+                  A safer way to feel heard.
+                </h1>
+                <p className="text-base text-slate-600 mb-8">
+                  Private. Ethical. Human-centered AI support.
+                </p>
+                <div className="flex gap-4 justify-center">
+                  <button
+                    onClick={() => navigate('chat')}
+                    className="px-8 py-3 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-all duration-300 hover:transform hover:-translate-y-0.5"
+                  >
+                    Start Conversation
+                  </button>
+                  <button className="px-8 py-3 bg-slate-100 text-slate-900 rounded-full font-medium hover:bg-slate-200 transition-colors">
+                    Learn More
+                  </button>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {currentSection === 'chat' && (
+            <section className="px-20 py-24">
+              <div className="max-w-2xl mx-auto">
+                <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/60 p-6">
+                  <div className="h-[450px] overflow-y-auto p-4 space-y-3">
+                    {messages.length === 0 && (
+                      <div className="text-center text-slate-500 py-8">
+                        Hi, I'm here with you. How are you feeling today?
+                      </div>
+                    )}
                     {messages.map((msg, i) => (
                       <div
                         key={i}
-                        className={`chat-bubble rounded-[32px] p-5 text-left shadow-[0_25px_60px_rgba(15,23,42,0.06)] ${
+                        className={`p-3 rounded-2xl max-w-[70%] text-sm leading-relaxed ${
                           msg.role === "user"
-                            ? "self-end max-w-[80%] bg-slate-900 text-white"
-                            : "self-start max-w-[80%] bg-slate-100 text-slate-900"
+                            ? "bg-blue-50 text-slate-900 ml-auto"
+                            : "bg-slate-100 text-slate-900 mr-auto"
                         }`}
                       >
-                        <p className="text-sm font-semibold text-slate-500">
-                          {msg.role === "user" ? "You" : "Simonsays"}
-                        </p>
-                        <p className="mt-3 whitespace-pre-wrap text-base leading-8">{msg.text}</p>
+                        {msg.text}
                       </div>
                     ))}
                   </div>
-                )}
+                  <div className="flex gap-3 mt-4">
+                    <input
+                      className="flex-1 px-4 py-3 rounded-full border border-slate-200 focus:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-100"
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      placeholder="Type your thoughts..."
+                    />
+                    <button
+                      onClick={sendMessage}
+                      disabled={!input}
+                      className="px-6 py-3 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-all duration-300 hover:transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Send
+                    </button>
+                  </div>
+                </div>
               </div>
-            </main>
+            </section>
+          )}
 
-            <div className="chat-bar fixed bottom-0 left-0 right-0 z-40 flex items-center gap-3 border-t border-slate-900 bg-[#121212] px-6 py-4 backdrop-blur-xl shadow-[0_-20px_40px_rgba(15,23,42,0.12)] sm:px-8">
-              <input
-                className="flex-1 rounded-full border border-slate-800 bg-[#181818] px-5 py-4 text-base text-white placeholder:text-slate-400 outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-800"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Type your thoughts..."
-              />
-              <button
-                onClick={sendMessage}
-                disabled={!input}
-                className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#181818] text-white shadow-lg shadow-[#00000050] transition hover:bg-[#1f1f1f] disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                ➤
-              </button>
-            </div>
-          </div>
+          {currentSection === 'insights' && (
+            <section className="px-20 py-24">
+              <div className="max-w-4xl mx-auto text-center">
+                <h1 className="text-5xl font-medium text-slate-900 mb-12">
+                  Your reflections
+                </h1>
+                <div className="grid md:grid-cols-3 gap-6">
+                  <div className="bg-white rounded-3xl p-8 shadow-xl shadow-slate-200/60">
+                    <h3 className="text-xl font-medium text-slate-900 mb-4">Mood trends</h3>
+                    <p className="text-slate-600">Track your emotional patterns over time</p>
+                  </div>
+                  <div className="bg-white rounded-3xl p-8 shadow-xl shadow-slate-200/60">
+                    <h3 className="text-xl font-medium text-slate-900 mb-4">Emotional patterns</h3>
+                    <p className="text-slate-600">Understand your feelings and triggers</p>
+                  </div>
+                  <div className="bg-white rounded-3xl p-8 shadow-xl shadow-slate-200/60">
+                    <h3 className="text-xl font-medium text-slate-900 mb-4">Weekly summary</h3>
+                    <p className="text-slate-600">Get insights into your mental wellness</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {currentSection === 'pricing' && (
+            <section className="px-20 py-24">
+              <div className="max-w-4xl mx-auto text-center">
+                <h1 className="text-5xl font-medium text-slate-900 mb-12">
+                  Simple pricing
+                </h1>
+                <div className="grid md:grid-cols-3 gap-6">
+                  <div className="bg-white rounded-3xl p-8 shadow-xl shadow-slate-200/60">
+                    <h3 className="text-2xl font-medium text-slate-900 mb-4">Free</h3>
+                    <p className="text-slate-600">Basic chat support</p>
+                  </div>
+                  <div className="bg-white rounded-3xl p-8 shadow-xl shadow-slate-200/60 border-2 border-blue-200">
+                    <h3 className="text-2xl font-medium text-slate-900 mb-4">Premium</h3>
+                    <p className="text-slate-600">Advanced features and insights</p>
+                  </div>
+                  <div className="bg-white rounded-3xl p-8 shadow-xl shadow-slate-200/60">
+                    <h3 className="text-2xl font-medium text-slate-900 mb-4">Pro</h3>
+                    <p className="text-slate-600">Complete mental wellness suite</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {currentSection === 'about' && (
+            <section className="px-20 py-24">
+              <div className="max-w-2xl mx-auto text-center">
+                <h1 className="text-5xl font-medium text-slate-900 mb-6">
+                  Built with care
+                </h1>
+                <p className="text-lg text-slate-600 leading-relaxed">
+                  Research-based. Privacy-first. Designed to support, not replace care.
+                </p>
+              </div>
+            </section>
+          )}
+
+          <footer className="text-center py-10 text-slate-500">
+            © simonsays
+          </footer>
         </div>
       )}
     </Authenticator>

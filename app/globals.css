@@ -1,9 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc;
-  --foreground: #121212;
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+  --primary: #6C8CFF;
+  --soft-bg: linear-gradient(135deg, #ffffff, #f4f7fb);
 }
 
 @theme inline {
@@ -14,7 +16,7 @@
 }
 
 body {
-  background: var(--background);
+  background: var(--soft-bg);
   color: var(--foreground);
   font-family: var(--font-sans);
   min-height: 100vh;
